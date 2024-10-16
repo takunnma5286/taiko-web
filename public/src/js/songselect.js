@@ -207,24 +207,24 @@ class SongSelect{
 			category: strings.random
 		})
 
-                // カスタムメニュー
-                // this.songs.push({
-                //     title: "ソースコード",
-                //     skin: this.songSkin.sourceCode,
-                //     action: "sourceCode",
-                // });
-				// for (let i = 0; i < 10; i++) {
-				    this.songs.push({
-                        title: "曲を投稿！",
-                        skin: this.songSkin.upload,
-                        action: "upload",
-                    });
-                // }
-				this.songs.push({
-					title: "掲示板",
-					skin: this.songSkin.keijiban,
-					action: "keijiban",
-				});
+			// カスタムメニュー
+			// this.songs.push({
+			//     title: "ソースコード",
+			//     skin: this.songSkin.sourceCode,
+			//     action: "sourceCode",
+			// });
+			// for (let i = 0; i < 10; i++) {
+			this.songs.push({
+				title: "曲を投稿！",
+				skin: this.songSkin.upload,
+				action: "upload",
+			});
+			// }
+			this.songs.push({
+				title: "掲示板",
+				skin: this.songSkin.keijiban,
+				action: "keijiban",
+			});
 		
 		this.songs.push({
 			title: strings.back,
@@ -859,23 +859,23 @@ class SongSelect{
 			}else if(currentSong.action === "plugins"){
 				this.toPlugins()
 			}
-                        // カスタムメニューの実行処理
-                        else if (currentSong.action === "sourceCode") {
-                            this.playSound("se_don");
-                            setTimeout(() => {
-                                open("https://github.com/yuukialpha/taiko-web","_blank");
-                            }, 500);
-                        } else if (currentSong.action === "upload") {
-                            this.playSound("se_don");
-                            setTimeout(() => {
-                                window.location.href = "/upload/";
-                            }, 100);
-                        } else if (currentSong.action === "keijiban") {
-							this.playSound("se_don");
-                            setTimeout(() => {
-                                window.location.href = "https://litey.trade/";
-                            }, 100);
-						}
+				// カスタムメニューの実行処理
+				else if (currentSong.action === "sourceCode") {
+					this.playSound("se_don");
+					setTimeout(() => {
+						open("https://github.com/yuukialpha/taiko-web","_blank");
+					}, 500);
+				} else if (currentSong.action === "upload") {
+					this.playSound("se_don");
+					setTimeout(() => {
+						window.location.href = "/upload/";
+					}, 100);
+				} else if (currentSong.action === "keijiban") {
+					this.playSound("se_don");
+					setTimeout(() => {
+						window.location.href = "https://litey.trade/";
+					}, 100);
+				}
 		}
 		this.pointer(false)
 	}

@@ -26,6 +26,7 @@ import flask
 import nkf
 import tjaf
 
+import subprocess
 # ----
 
 from functools import wraps
@@ -820,6 +821,52 @@ def upload_file():
         (target_dir / "main.tja").write_bytes(tja_data)
         # 曲ファイルも保存
         (target_dir / f"main.{db_entry['music_type']}").write_bytes(music_data)
+        
+        #プレビュー用ファイル用にサビ位置を特定
+        try:
+            with open(f"{target_dir}/main.tja") as f:
+                l = f.readlines()
+            temp_time = 0
+            BPM = 120 #1分間の四分音符の数
+            onpu = 4 #1小節の四分音符の数
+            shousetu = BPM / 60 * onpu #1小節の秒数
+            befor = 0
+            num = 0
+            for i in l:
+                if i.startswith("//"):
+                    pass
+                elif i.startswith("BPM"):
+                    BPM = float(i[4:-1])
+                    shousetu = BPM / 60 * onpu
+                    #print(f"setBPM:{BPM}")
+                elif i.startswith("#BPMCHANGE"):
+                    BPM = float(i[11:-1])
+                    shousetu = BPM / 60 * onpu
+                    #print(f"changeBPM:{BPM}")
+                elif i.startswith("#MEASURE"):
+                    temp = i[9:-1].split("/")
+                    onpu =  4 / float(temp[1]) * float(temp[0])
+                    #print(temp)
+                    shousetu = 60 / BPM * onpu
+                    #print(f"changeMEASURE:{shousetu}")
+                elif i.startswith("#GOGOSTART"):
+                    #print("GOGOSTART!")
+                    befor = temp_time
+                elif i.startswith("#GOGOEND"):
+                    #print()
+                    #print("GOGOEND!")
+                    #print(f"start:{befor}")
+                    #print(f"temp_time:{temp_time - befor}")
+                    #print(f"BPM:{BPM}")
+                    #print()
+                    subprocess.run(f"ffmpeg -ss {befor} -i main.{db_entry['music_type']} -t {temp_time - befor} preview.{get_config()["preview_type"]}", cwd=target_dir)
+                    break
+                elif len(i) >= 3 and i[-2] == ",":
+                    temp_time += shousetu
+                    #print(f"shousetuEnd temp_time = {temp_time}s")
+        #ffmpegでプレビュー用ファイルを作成
+        except: #途中で例外が発生した場合、全体をプレビューファイルとして書き出す
+            subprocess.run(f"ffmpeg -i main.{db_entry['music_type']} preview.{get_config()["preview_type"]}", cwd=target_dir)
     except Exception as e:
         error_str = ''.join(traceback.TracebackException.from_exception(e).format())
         return flask.jsonify({'error': error_str})
@@ -828,9 +875,10 @@ def upload_file():
 
 @app.route("/api/delete", methods=["POST"])
 def delete():
-    rand = random.randint(0, 10)
-    if (rand != 10):
-        return flask.jsonify({ "success": False, "reason": str(rand) + " IS NOT 10" })
+    num = 1
+    rand = random.randint(0, num)
+    if (rand != num):
+        return flask.jsonify({ "success": False, "reason": str(rand) + f" IS NOT {num}" })
 
     id = flask.request.get_json().get('id')
     client["taiko"]["songs"].delete_one({ "id": id })

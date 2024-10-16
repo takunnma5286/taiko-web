@@ -793,7 +793,7 @@ var translations = {
 		},
 		easierBigNotes: {
 			name: {
-				ja: "簡単な大きな音符",
+				ja: "大きな音符を片方のみで打てるようにする",
 				en: "Easier Big Notes",
 				cn: "简单的大音符",
 				tw: "簡單的大音符",
