@@ -49,13 +49,6 @@ flask run
 --reload
 ```
 
-
-## デプロイ
-
-今すぐデプロイ！
-
-- https://taikoapp.uk/
-
 ## その他
 ### GoogleDriveの有効化
 [Google Cloud](https://console.cloud.google.com/welcome)で任意の名前のプロジェクトを作成
