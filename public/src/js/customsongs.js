@@ -3,11 +3,11 @@ class CustomSongs{
 		this.init(...args)
 	}
 	init(touchEnabled, noPage, noLoading){
-		//noPageはサーバー側の譜面として読み込む?
-		//おそらくGoogleDrive機能のために導入
+		//noPageは読み込み機構なしでサーバー側の譜面として読み込む?
+		//おそらくカスタム曲でゲーム起動するときのため
 		//GoogleDrive機能については未調査
 		this.loaderDiv = document.createElement("div")
-		this.loaderDiv.innerHTML = assets.pages["loadsong"]
+		this.loaderDiv.innerHTML = assets.pages["loadsong"] //assetsから何かの画面を引っ張り出して反映?
 		var loadingText = this.loaderDiv.querySelector("#loading-text") //null
 		this.setAltText(loadingText, strings.loading) //#loading-textが存在したら、今の言語で"ロード中"をaltテキストとして設定
 		

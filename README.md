@@ -55,3 +55,23 @@ flask run
 今すぐデプロイ！
 
 - https://taikoapp.uk/
+
+## その他
+### GoogleDriveの有効化
+[Google Cloud](https://console.cloud.google.com/welcome)で任意の名前のプロジェクトを作成
+
+- [Google Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com)
+- [Google Picker API](https://console.cloud.google.com/apis/api/picker.googleapis.com/metrics)
+
+を有効化
+
+config.pyの`GOOGLE_CREDENTIALS`を変更
+```python
+GOOGLE_CREDENTIALS = {
+    'gdrive_enabled': True,
+    'api_key': 'API キー',
+    'oauth_client_id': 'OAuth 2.0 クライアント ID',
+    'project_number': 'プロジェクトのID',
+    'min_level': None
+}
+```

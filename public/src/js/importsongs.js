@@ -228,7 +228,9 @@
 		var category = fileObj.category
 		var category_id = fileObj.category_id
 		if(!this.limited){
-			var filePromise = file.read(prompt("太鼓さん次郎のファイルは\"sjis\"、TJAPlayer3のファイルは\"utf-8\"と入力してください。"))
+			//文字コードの指定機能を撤廃(後で自動検出もしくはよりよい方法に変更)
+			//var filePromise = file.read(prompt("太鼓さん次郎のファイルは\"sjis\"、TJAPlayer3のファイルは\"utf-8\"と入力してください。"))
+			var filePromise = file.read("utf-8")
 		}else{
 			var filePromise = Promise.resolve()
 		}
