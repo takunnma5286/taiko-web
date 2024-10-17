@@ -3,14 +3,18 @@ class CustomSongs{
 		this.init(...args)
 	}
 	init(touchEnabled, noPage, noLoading){
+		//noPageはサーバー側の譜面として読み込む?
+		//おそらくGoogleDrive機能のために導入
+		//GoogleDrive機能については未調査
 		this.loaderDiv = document.createElement("div")
 		this.loaderDiv.innerHTML = assets.pages["loadsong"]
-		var loadingText = this.loaderDiv.querySelector("#loading-text")
-		this.setAltText(loadingText, strings.loading)
+		var loadingText = this.loaderDiv.querySelector("#loading-text") //null
+		this.setAltText(loadingText, strings.loading) //#loading-textが存在したら、今の言語で"ロード中"をaltテキストとして設定
 		
 		this.locked = false
 		this.mode = "main"
 		
+
 		if(noPage){
 			this.noPage = true
 			this.noLoading = noLoading
@@ -18,29 +22,37 @@ class CustomSongs{
 		}
 		
 		this.touchEnabled = touchEnabled
-		loader.changePage("customsongs", true)
+		loader.changePage("customsongs", true) //ページ推移
 		if(touchEnabled){
 			this.getElement("view-outer").classList.add("touch-enabled")
 		}
 		
-		var tutorialTitle = this.getElement("view-title")
+		var tutorialTitle = this.getElement("view-title") //タイトルの要素を取得
 		this.setAltText(tutorialTitle, strings.customSongs.title)
 		
 		var tutorialContent = this.getElement("view-content")
-		strings.customSongs.description.forEach(string => {
-			tutorialContent.appendChild(document.createTextNode(string))
-			tutorialContent.appendChild(document.createElement("br"))
+		strings.customSongs.description.forEach(string => { //リストの要素を1つづつstringに突っ込んで処理
+			tutorialContent.appendChild(document.createTextNode(string)) //1行表示
+			tutorialContent.appendChild(document.createElement("br")) //改行
 		})
 		
 		this.items = []
+		
+		//???
 		this.linkLocalFolder = document.getElementById("link-localfolder")
+		
+		//モバイルデバイスではない(フォルダ選択ウィンドウが使用可能)かどうか確認
 		this.hasLocal = (typeof showDirectoryPicker === "function" || "webkitdirectory" in HTMLInputElement.prototype) && !(/Android|iPhone|iPad/.test(navigator.userAgent))
+		
+		//???
 		this.selected = -1
 		
 		if(this.hasLocal){
-			this.browse = document.getElementById("browse")
+			this.browse = document.getElementById("browse") //フォルダ選択ウィンドウを立ち上げる要素を選択
+
+			//フォルダ選択ボタンにイベントリスナーを設定、bind(this)しないとthisがフォルダ選択ボタンを指してしまう
 			pageEvents.add(this.browse, "change", this.browseChange.bind(this))
-			this.setAltText(this.linkLocalFolder, strings.customSongs.localFolder)
+			this.setAltText(this.linkLocalFolder, strings.customSongs.localFolder) //→ローカルフォルダ...
 			pageEvents.add(this.linkLocalFolder, ["mousedown", "touchstart"], this.localFolder.bind(this))
 			this.items.push(this.linkLocalFolder)
 			if(this.selected === -1){
@@ -259,20 +271,20 @@ class CustomSongs{
 		}).then(() => output)
 	}
 	importLocal(files){
-		if(!files.length){
+		if(!files.length){ //ファイルがない
 			if(this.noPage){
-				return Promise.reject("cancel")
+				return Promise.reject("cancel") //失敗とする
 			}else{
-				return Promise.resolve("cancel")
+				return Promise.resolve("cancel") //成功とする
 			}
 		}
-		this.locked = true
-		this.loading(true)
+		this.locked = true //移動をロックする?
+		this.loading(true) //ロードしてるよ
 		
 		var importSongs = new ImportSongs()
 		return importSongs.load(files).then(this.songsLoaded.bind(this), e => {
 			if(!this.noPage){
-				this.browse.form.reset()
+				this.browse.form.reset() //フォルダ選択フォームをリセットする
 			}
 			this.locked = false
 			this.loading(false)
@@ -398,7 +410,7 @@ class CustomSongs{
 			assets.customSongs = true
 			assets.customSelected = this.noPage ? +localStorage.getItem("customSelected") : 0
 		}
-		if(this.noPage){
+		if(this.noPage){ //譜面をサーバー側の譜面として読み込む?
 			pageEvents.send("import-songs", length)
 		}else{
 			assets.sounds["se_don"].play()
