@@ -3,16 +3,21 @@
 Windows上で趣味で開発
 
 ## デバッグの開始
+必要なもの:
+- [Python3.12.7](https://www.python.org/downloads/release/python-3127/)
+- Docker
+
 pythonの依存関係をpyenv上にインストールします  
-python3.12.7をインストールしてない場合は[してきて](https://www.python.org/downloads/release/python-3127/)ください  
+ 
 ```
 py -3.12 -m venv .venv
 .venv/Scripts/activate
 pip install -r requirements.txt
 ```
 
-この作業は初回以外は必要ありません  
-dockerを使用し、データベースサーバーを起動します
+この作業は初回以外は必要ありません
+
+dockerを使用し、データベースサーバーをインストール・起動します
 
 ```
 docker run --detach `
@@ -30,7 +35,7 @@ docker run --detach `
   redis
 ```
 
-サーバーを起動してください
+pythonを使用し、taiko webのサーバーを起動します
 
 ```
 .venv/Scripts/activate
@@ -38,6 +43,7 @@ flask run
 ```
 
 ### 引数一覧
+※これらはpythonの引数です
 
 ポートを変更したい場合
 ```
@@ -50,7 +56,7 @@ flask run
 ```
 
 ## その他
-### GoogleDriveの有効化
+### GoogleDriveとの連携の有効化
 [Google Cloud](https://console.cloud.google.com/welcome)で任意の名前のプロジェクトを作成
 
 - [Google Drive API](https://console.cloud.google.com/apis/library/drive.googleapis.com)
